@@ -169,11 +169,11 @@ public class Pokeball : MonoBehaviour
     {
         _gameManager.ReduceMainThemeVolume();
         _gameManager.IsCapturing = true;
-        isCapturing = true;
 
         StartCoroutine(Attack());
         yield return new WaitForSeconds(3.8f);
 
+        isCapturing = true;
         _spriteRenderer.sprite = sprites[(int)_ballType];
         _spriteRenderer.enabled = true;
         _gameManager.SetPlayerActive(false);
