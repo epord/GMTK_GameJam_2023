@@ -50,3 +50,6 @@ TagManager:
   - name: ForestObjects
     uniqueID: 1048041197
     locked: 0
+  - name: FogOfWar
+    uniqueID: 3676098767
+    locked: 0

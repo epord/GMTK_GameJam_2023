@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8479525717234443928}
   - component: {fileID: 8114368471166670745}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: highGrass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1797198603
+  m_SortingLayerID: 1048041197
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ca53c93990395fb4ea4aa5d573c185a1, type: 3}
