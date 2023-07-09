@@ -148,8 +148,9 @@ public class FurretController : MonoBehaviour
         while (_movementQueue.Count > 0)
         {
             Vector2 qMove = _movementQueue.Dequeue();
-            transform.position += new Vector3(qMove.x, qMove.y) * Time.fixedDeltaTime;
+            transform.position += new Vector3(qMove.x, qMove.y) * Time.deltaTime;
         }
+
     }
 
     void FixedUpdate()
