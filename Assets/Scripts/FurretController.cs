@@ -49,8 +49,6 @@ public class FurretController : MonoBehaviour
     void Update()
     {
         Vector2 inputMove = _playerControls.Overworld.Move.ReadValue<Vector2>();
-        Debug.Log(inputMove);
-
         // Get the proper direction
         MovementDirection newMoveDirection = MovementDirection.RIGHT;
         if (Mathf.Abs(inputMove.y) * 2 <= Mathf.Abs(inputMove.x))
