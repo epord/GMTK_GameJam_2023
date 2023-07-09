@@ -33,6 +33,7 @@ public class Pokeball : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private PlayerControls _playerControls;
     private GameManager _gameManager;
+    private float _accumulatedDelta = 0f;
 
     private int _escapeCountNeeded = 0;
 
@@ -71,10 +72,12 @@ public class Pokeball : MonoBehaviour
     {
         bool inputEscape = _playerControls.Overworld.EscapePokeball.WasPerformedThisFrame();
         timeSinceCapture += Time.deltaTime;
+        _accumulatedDelta += Time.deltaTime;
 
-        if (inputEscape && timeSinceCapture < TIME_TO_ESCAPE && !_isGameOver)
+        if (inputEscape && timeSinceCapture < TIME_TO_ESCAPE && !_isGameOver && _accumulatedDelta > 0.1)
         {
             escapeCount++;
+            _accumulatedDelta = 0f;
         }
 
         if (escapeCount >= _escapeCountNeeded)
