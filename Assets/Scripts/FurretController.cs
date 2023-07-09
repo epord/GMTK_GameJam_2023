@@ -5,9 +5,12 @@ public class FurretController : MonoBehaviour
 {
     // Constants that can be edited from UI
     public float NormalSpeed = 1f;
+    public float ChangeDirectionTolerance = 0.1f;
     private float _currentSpeed;
     private PlayerControls _playerControls;
     private Animator _animator;
+
+    private MovementDirection _movementDirection = MovementDirection.RIGHT;
 
     private void Awake()
     {
@@ -40,69 +43,71 @@ public class FurretController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 move = _playerControls.Overworld.Move.ReadValue<Vector2>();
-        move *= _currentSpeed;
-        transform.position += new Vector3(move.x, move.y);
+        Vector2 inputMove = _playerControls.Overworld.Move.ReadValue<Vector2>();
+        Debug.Log(inputMove);
 
-        this.ApplyAnimation();
-    }
-    
-    private void ApplyAnimation()
-    {
-        Vector2 moveDirection = _playerControls.Overworld.Move.ReadValue<Vector2>();
-        float tolerance = 0.25f;
-
-        bool moving = true;
-
-        if (Mathf.Abs(moveDirection.y - 0.5f) < tolerance && Mathf.Abs(moveDirection.x - 0.5f) < tolerance)
+        // Get the proper direction
+        MovementDirection newMoveDirection = MovementDirection.RIGHT;
+        if (Mathf.Abs(inputMove.y) * 2 <= Mathf.Abs(inputMove.x))
         {
-            _animator.SetInteger("direction", (int)MovementDirection.UP_LEFT);
+            if (inputMove.x >= 0)
+            {
+                newMoveDirection = MovementDirection.RIGHT;
+            }
+            else
+            {
+                newMoveDirection = MovementDirection.LEFT;
+            }
         }
-        if (Mathf.Abs(moveDirection.y - 0.5f) < tolerance && Mathf.Abs(moveDirection.x + 0.5f) < tolerance)
+        else if (Mathf.Abs(inputMove.x) * 2 <= Mathf.Abs(inputMove.y))
         {
-            _animator.SetInteger("direction", (int)MovementDirection.UP_RIGHT);
+            if (inputMove.y >= 0)
+            {
+                newMoveDirection = MovementDirection.UP;
+            }
+            else
+            {
+                newMoveDirection = MovementDirection.DOWN;
+            }
         }
-        else if (Mathf.Abs(moveDirection.y - 1f) < tolerance && Mathf.Abs(moveDirection.x) < tolerance)
+        else if (inputMove.x >= 0 && inputMove.y >= 0)
         {
-            _animator.SetInteger("direction", (int)MovementDirection.UP);
+            newMoveDirection = MovementDirection.UP_RIGHT;
         }
-        if (Mathf.Abs(moveDirection.y + 0.5f) < tolerance && Mathf.Abs(moveDirection.x - 0.5f) < tolerance)
+        else if (inputMove.x >= 0 && inputMove.y <= 0)
         {
-            _animator.SetInteger("direction", (int)MovementDirection.DOWN_LEFT);
+            newMoveDirection = MovementDirection.DOWN_RIGHT;
         }
-        if (Mathf.Abs(moveDirection.y + 0.5f) < tolerance && Mathf.Abs(moveDirection.x + 0.5f) < tolerance)
+        else if (inputMove.x <= 0 && inputMove.y >= 0)
         {
-            _animator.SetInteger("direction", (int)MovementDirection.DOWN_RIGHT);
+            newMoveDirection = MovementDirection.UP_LEFT;
         }
-        else if (Mathf.Abs(moveDirection.y + 1f) < tolerance && Mathf.Abs(moveDirection.x) < tolerance)
+        else if (inputMove.x <= 0 && inputMove.y <= 0)
         {
-            _animator.SetInteger("direction", (int)MovementDirection.DOWN);
+            newMoveDirection = MovementDirection.DOWN_LEFT;
         }
-        else if (Mathf.Abs(moveDirection.y) < tolerance && Mathf.Abs(moveDirection.x - 1f) < tolerance)
+        // Do not update the direction animation if the movement is too small
+        if (Mathf.Abs(inputMove.x) >= ChangeDirectionTolerance || Mathf.Abs(inputMove.y) >= ChangeDirectionTolerance)
         {
-            _animator.SetInteger("direction", (int)MovementDirection.LEFT);
+            _movementDirection = newMoveDirection;
         }
-        else if (Mathf.Abs(moveDirection.y) < tolerance && Mathf.Abs(moveDirection.x + 1f) < tolerance)
-        {
-            _animator.SetInteger("direction", (int)MovementDirection.RIGHT);
-        }
-        else if (Mathf.Abs(moveDirection.y) < tolerance && Mathf.Abs(moveDirection.x) < tolerance)
-        {
-            moving = false;
-        }
-
-        _animator.SetBool("moving", moving);
+        _animator.SetInteger("direction", (int)_movementDirection);
+        // Turn off the animator when standing still
+        _animator.SetBool("moving", inputMove.x != 0 || inputMove.y != 0);
+        // Move the player the actual moved amount
+        Vector2 finalMove = inputMove * _currentSpeed;
+        transform.position += new Vector3(finalMove.x, finalMove.y);
     }
 }
 
 public enum MovementDirection
 {
-    UP,
-    UP_LEFT,
-    LEFT,
-    DOWN_LEFT,
-    DOWN,
-    DOWN_RIGHT,
-    RIGHT,
-    UP_RIGHT,
+    UP=0,
+    UP_RIGHT=1,
+    RIGHT=2,
+    DOWN_RIGHT=3,
+    DOWN=4,
+    DOWN_LEFT=5,
+    LEFT=6,
+    UP_LEFT=7,
 }
