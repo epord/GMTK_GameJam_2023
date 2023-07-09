@@ -43,14 +43,20 @@ public class Trainer : MonoBehaviour
         Vector2 direction = Player.transform.position - transform.position;
         RaycastHit2D[] hits = Physics2D.RaycastAll(origin, direction, SightDistance);
         bool viewBlocked = false;
-        foreach (RaycastHit2D hit in hits )
+        bool playerIsInRange = false;
+        foreach (RaycastHit2D hit in hits)
         {
-            if (hit.collider.gameObject.GetComponent<Trainer>() != null && hit.collider.gameObject.GetComponent<FurretController>())
+            if (hit.collider.gameObject.GetComponent<Trainer>() == null && hit.collider.gameObject.GetComponent<FurretController>() == null)
             {
-                viewBlocked = true; break;
+                viewBlocked = true;
+            }
+
+            if (hit.collider.gameObject.GetComponent<FurretController>() != null)
+            {
+                playerIsInRange = true;
             }
         }
-        if (!viewBlocked)
+        if (!viewBlocked && playerIsInRange)
         {
             _lastPlayerPosition = Player.transform.position;
             _knowsPlayer = true;
