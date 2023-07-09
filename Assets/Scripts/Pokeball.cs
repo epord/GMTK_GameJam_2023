@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Pokeball : MonoBehaviour
 {
@@ -117,7 +118,9 @@ public class Pokeball : MonoBehaviour
         yield return new WaitForSeconds(1.8f);
 
         // Captured
+        FindObjectOfType<ScoreManager>().EndGame();
         transform.eulerAngles = new Vector3(0, 0, 0);
-        // TODO: lose
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene("GameOver");
     }
 }

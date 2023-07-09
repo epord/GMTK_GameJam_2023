@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
     public GameObject _player;
     public GameObject _pokeball;
 
+    public void Start()
+    {
+        FindObjectOfType<ScoreManager>().StartGame();
+    }
 
     public GameObject GetPlayerGameObject()
     {
