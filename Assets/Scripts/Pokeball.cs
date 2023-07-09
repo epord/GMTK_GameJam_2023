@@ -158,7 +158,7 @@ public class Pokeball : MonoBehaviour
         _audioSource.PlayOneShot(attack1Clip);
         yield return new WaitForSeconds(1.2f);
         shakeAttack.enabled = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         shakeAttack.enabled = true;
         _audioSource.PlayOneShot(attack2Clip);
         yield return new WaitForSeconds(1.2f);
@@ -182,30 +182,22 @@ public class Pokeball : MonoBehaviour
         // Start capturing
         _audioSource.PlayOneShot(capturingClip);
 
-        // First
-        transform.eulerAngles = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(0.3f);
-        transform.eulerAngles = new Vector3(0, 0, 30);
-        yield return new WaitForSeconds(1.5f);
-
-        // Second
-        transform.eulerAngles = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(0.3f);
-        transform.eulerAngles = new Vector3(0, 0, -30);
-        yield return new WaitForSeconds(1.5f);
-
-        // Third
-        transform.eulerAngles = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(0.3f);
-        transform.eulerAngles = new Vector3(0, 0, 30);
-        yield return new WaitForSeconds(1.5f);
-
-        // Fourth
-        transform.eulerAngles = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(0.3f);
-        transform.eulerAngles = new Vector3(0, 0, -30);
-        yield return new WaitForSeconds(1.8f);
-
+        for (int i = 0; i < 6; i++)
+        {
+            // First
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            yield return new WaitForSeconds(0.3f);
+            transform.eulerAngles = new Vector3(0, 0, 30);
+            yield return new WaitForSeconds(0.3f);
+            
+            
+            // Second
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            yield return new WaitForSeconds(0.3f);
+            transform.eulerAngles = new Vector3(0, 0, -30);
+            yield return new WaitForSeconds(0.3f);
+        }
+        
         // Captured
         _isGameOver = true;
         FindObjectOfType<ScoreManager>().EndGame();
