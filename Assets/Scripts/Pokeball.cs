@@ -88,20 +88,20 @@ public class Pokeball : MonoBehaviour
         int min = BASE_MIN_CAPTURES;
         int max = BASE_MAX_CAPTURES;
 
-        int countFrames = Time.frameCount;
+        float timeSinceStartup = Time.realtimeSinceStartup;
         _ballType = PokeballType.NORMAL;
         if (accumulatedDamage > 0)
         {
             float r = Random.value;
-            if(countFrames > 36000)
+            if(timeSinceStartup > 600)
             {
                 _currentFase = fase4Ball;
             }
-            else if (countFrames > 18000)
+            else if (timeSinceStartup > 300)
             {
                 _currentFase = fase3Ball;
             }
-            else if (countFrames > 9000)
+            else if (timeSinceStartup > 90)
             {
                 _currentFase = fase2Ball;
             }
@@ -109,6 +109,7 @@ public class Pokeball : MonoBehaviour
             {
                 _currentFase = fase1Ball;
             }
+
             float accumulatedProb = 0f;
             for (int i = 0; i < 4; i++)
             {
