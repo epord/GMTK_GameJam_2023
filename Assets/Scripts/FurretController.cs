@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class FurretController : MonoBehaviour
 {
@@ -11,9 +13,12 @@ public class FurretController : MonoBehaviour
     private Animator _animator;
 
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
+    private Vector2 _lastMovement = Vector2.zero;
+    private Queue<Vector2> _movementQueue;
 
     private void Awake()
     {
+        _movementQueue = new Queue<Vector2>();
         _playerControls = new PlayerControls();
         _animator = GetComponent<Animator>();
     }
@@ -94,11 +99,20 @@ public class FurretController : MonoBehaviour
         _animator.SetInteger("direction", (int)_movementDirection);
         // Turn off the animator when standing still
         _animator.SetBool("moving", inputMove.x != 0 || inputMove.y != 0);
-        // Move the player the actual moved amount
-        Vector2 finalMove = inputMove * _currentSpeed;
-        transform.position += new Vector3(finalMove.x, finalMove.y);
+        _movementQueue.Enqueue(inputMove * _currentSpeed);
+    }
+
+    void FixedUpdate()
+    {
+        while (_movementQueue.Count > 0)
+        {
+            Vector2 qMove = _movementQueue.Dequeue();
+            transform.position += new Vector3(qMove.x, qMove.y);
+        }
     }
 }
+
+   
 
 public enum MovementDirection
 {
