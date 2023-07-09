@@ -6,9 +6,23 @@ public class Pokeball : MonoBehaviour
 {
     public AudioClip capturingClip;
     public AudioClip escapeClip;
+    public float[] fase1Ball = { 0.65f, 0.25f, 0.1f, 0f };
+    public float[] fase2Ball = { 0.4f, 0.4f, 0.2f, 0f };
+    public float[] fase3Ball = { 0.15f, 0.35f, 0.5f, 0.1f };
+    public float[] fase4Ball = { 0.05f, 0.15f, 0.3f, 0.5f };
+    public int[] ballMultipliers = { 1, 2, 4, 100 };
+    public Sprite[] sprites = new Sprite[4];
+
+    private float[] _currentFase = new float[4];
+    private PokeballType _ballType = PokeballType.NORMAL;
+
+    
+
 
     private const float TIME_TO_ESCAPE = 8000; // 8s based on audio
-    private const int ESCAPE_COUNT_NEEDED = 2; // TODO: cahnge this based on how much life is left
+    private const int BASE_MIN_CAPTURES = 3;
+    private const int BASE_MAX_CAPTURES = 6;
+
     private float timeSinceCapture = 0f;
     private int escapeCount = 0;
     private bool isCapturing = false;
@@ -17,6 +31,8 @@ public class Pokeball : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private PlayerControls _playerControls;
     private GameManager _gameManager;
+
+    private int _escapeCountNeeded = 0;
 
     private void Awake()
     {
@@ -59,14 +75,61 @@ public class Pokeball : MonoBehaviour
             escapeCount++;
         }
 
-        if (escapeCount >= ESCAPE_COUNT_NEEDED)
+        if (escapeCount >= _escapeCountNeeded)
         {
             StartCoroutine(StopCapture());
         }
     }
 
-    public void StartCapture()
+    public void StartCapture(int accumulatedDamage)
     {
+        int min = BASE_MIN_CAPTURES;
+        int max = BASE_MAX_CAPTURES;
+
+        int countFrames = Time.frameCount;
+        _ballType = PokeballType.NORMAL;
+        if (accumulatedDamage > 0)
+        {
+            float r = Random.value;
+            if(countFrames > 36000)
+            {
+                _currentFase = fase4Ball;
+            }
+            else if (countFrames > 18000)
+            {
+                _currentFase = fase3Ball;
+            }
+            else if (countFrames > 9000)
+            {
+                _currentFase = fase2Ball;
+            }
+            else
+            {
+                _currentFase = fase1Ball;
+            }
+            float accumulatedProb = 0f;
+            for (int i = 0; i < 4; i++)
+            {
+                accumulatedProb += _currentFase[i];
+                if (r < accumulatedProb)
+                {
+                    _ballType = (PokeballType)i;
+                    break;
+                }
+            }
+            float multiplier = 1f;
+            multiplier += accumulatedDamage * 0.5f;
+            multiplier *= ballMultipliers[(int)_ballType];
+            min = (int)Mathf.Ceil(min * multiplier);
+            max = (int)Mathf.Ceil(max * multiplier);
+            _escapeCountNeeded = Random.Range(min, max+1);
+        }
+        else
+        {
+            _escapeCountNeeded = Random.Range(3, 5);
+        }
+
+        _spriteRenderer.sprite = sprites[(int)_ballType];
         _spriteRenderer.enabled = true;
         _gameManager.SetPlayerActive(false);
         escapeCount = 0;
@@ -120,4 +183,12 @@ public class Pokeball : MonoBehaviour
         transform.eulerAngles = new Vector3(0, 0, 0);
         // TODO: lose
     }
+}
+
+public enum PokeballType
+{
+    NORMAL=0,
+    SUPER=1,
+    ULTRA=2,
+    MASTER=3
 }

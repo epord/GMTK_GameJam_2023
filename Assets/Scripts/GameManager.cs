@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject _player;
     public GameObject _pokeball;
 
+    private float _accumulatedTime = 0;
 
     public GameObject GetPlayerGameObject()
     {
@@ -18,8 +19,8 @@ public class GameManager : MonoBehaviour
         _player.SetActive(value);
     }
 
-    public void StartCapture()
+    public void StartCapture(int damage)
     {
-        _pokeball.GetComponent<Pokeball>().StartCapture();
+        _pokeball.GetComponent<Pokeball>().StartCapture(damage);
     }
 }

@@ -152,7 +152,7 @@ public class FurretController : MonoBehaviour
     {
         if(_remainingInvulnerability <= 0 && other.gameObject.GetComponent<Trainer>() != null)
         {
-            _gameManager.StartCapture();
+            _gameManager.StartCapture(_accumulatedDamage);
             _remainingInvulnerability = InvulnerabilityFrames;
             _currentSpeed = FastSpeed;
             _accumulatedDamage++;
