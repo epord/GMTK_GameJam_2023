@@ -6,8 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public GameObject _player;
     public GameObject _pokeball;
-
-    private float _accumulatedTime = 0;
+    public bool IsCapturing { get; set; }
+    public void Start()
+    {
+        FindObjectOfType<ScoreManager>().StartGame();
+    }
 
     public GameObject GetPlayerGameObject()
     {

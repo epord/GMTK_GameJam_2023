@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Pokeball : MonoBehaviour
 {
@@ -12,13 +13,13 @@ public class Pokeball : MonoBehaviour
     public float[] fase4Ball = { 0.05f, 0.15f, 0.3f, 0.5f };
     public int[] ballMultipliers = { 1, 2, 4, 100 };
     public Sprite[] sprites = new Sprite[4];
+    public AudioClip attack1Clip;
+    public AudioClip attack2Clip;
 
     private float[] _currentFase = new float[4];
     private PokeballType _ballType = PokeballType.NORMAL;
-
     
-
-
+    
     private const float TIME_TO_ESCAPE = 8000; // 8s based on audio
     private const int BASE_MIN_CAPTURES = 3;
     private const int BASE_MAX_CAPTURES = 6;
@@ -26,6 +27,7 @@ public class Pokeball : MonoBehaviour
     private float timeSinceCapture = 0f;
     private int escapeCount = 0;
     private bool isCapturing = false;
+    private bool _isGameOver = false;
     private Coroutine capturingCoroutine;
     private AudioSource _audioSource;
     private SpriteRenderer _spriteRenderer;
@@ -70,7 +72,7 @@ public class Pokeball : MonoBehaviour
         bool inputEscape = _playerControls.Overworld.EscapePokeball.WasPerformedThisFrame();
         timeSinceCapture += Time.deltaTime;
 
-        if (inputEscape && timeSinceCapture < TIME_TO_ESCAPE)
+        if (inputEscape && timeSinceCapture < TIME_TO_ESCAPE && !_isGameOver)
         {
             escapeCount++;
         }
@@ -134,6 +136,7 @@ public class Pokeball : MonoBehaviour
         _gameManager.SetPlayerActive(false);
         escapeCount = 0;
         isCapturing = true;
+        _gameManager.IsCapturing = true;
         capturingCoroutine = StartCoroutine(Tilt());
     }
 
@@ -149,10 +152,28 @@ public class Pokeball : MonoBehaviour
 
         _spriteRenderer.enabled = false;
         _gameManager.SetPlayerActive(true);
+        _gameManager.IsCapturing = false;
+    }
+
+    private IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(0.3f);
+        _audioSource.PlayOneShot(attack1Clip);
+        yield return new WaitForSeconds(1.5f);
+        _audioSource.PlayOneShot(attack2Clip);
     }
 
     private IEnumerator Tilt()
     {
+        StartCoroutine(Attack());
+        yield return new WaitForSeconds(4.6f);
+
+        _spriteRenderer.enabled = true;
+        _gameManager.SetPlayerActive(false);
+        escapeCount = 0;
+        isCapturing = true;
+
+        // Start capturing
         _audioSource.PlayOneShot(capturingClip);
 
         // First
@@ -180,8 +201,11 @@ public class Pokeball : MonoBehaviour
         yield return new WaitForSeconds(1.8f);
 
         // Captured
+        _isGameOver = true;
+        FindObjectOfType<ScoreManager>().EndGame();
         transform.eulerAngles = new Vector3(0, 0, 0);
-        // TODO: lose
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene("GameOver");
     }
 }
 

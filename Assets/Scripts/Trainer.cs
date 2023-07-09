@@ -6,18 +6,18 @@ using static UnityEngine.EventSystems.StandaloneInputModule;
 public class Trainer : MonoBehaviour
 {
 
-    public GameObject Player;
     public float SightDistance = 10.0f;
     public float TrainerBaseSpeed = 0.02f;
     public float MinimumMovementTolerance = 0.01f;
 
+    private GameObject Player;
     private Vector3 _lastPlayerPosition;
     private Queue<Vector2> _movementQueue;
     private float _currentSpeed = 0f;
     private bool _knowsPlayer = false;
     private Animator _animator;
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
-
+    private GameManager _gameManager;
 
 
     // Start is called before the first frame update
@@ -26,6 +26,8 @@ public class Trainer : MonoBehaviour
         _movementQueue = new Queue<Vector2>();
         _currentSpeed = TrainerBaseSpeed;
         _animator = GetComponent<Animator>();
+        _gameManager = FindObjectOfType<GameManager>();
+        Player = _gameManager.GetPlayerGameObject();
 
     }
 
@@ -37,18 +39,29 @@ public class Trainer : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_gameManager.IsCapturing)
+        {
+            return;
+        }
+
         Vector2 origin = transform.position;
         Vector2 direction = Player.transform.position - transform.position;
         RaycastHit2D[] hits = Physics2D.RaycastAll(origin, direction, SightDistance);
         bool viewBlocked = false;
-        foreach (RaycastHit2D hit in hits )
+        bool playerIsInRange = false;
+        foreach (RaycastHit2D hit in hits)
         {
-            if (hit.collider.gameObject.GetComponent<Trainer>() != null && hit.collider.gameObject.GetComponent<FurretController>())
+            if (hit.collider.gameObject.GetComponent<Trainer>() == null && hit.collider.gameObject.GetComponent<FurretController>() == null)
             {
-                viewBlocked = true; break;
+                viewBlocked = true;
+            }
+
+            if (hit.collider.gameObject.GetComponent<FurretController>() != null)
+            {
+                playerIsInRange = true;
             }
         }
-        if (!viewBlocked)
+        if (!viewBlocked && playerIsInRange)
         {
             _lastPlayerPosition = Player.transform.position;
             _knowsPlayer = true;
