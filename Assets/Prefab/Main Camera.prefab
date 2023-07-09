@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
+  _pokeball: {fileID: 8235217676596151312}
 --- !u!1 &7263266218563259056
 GameObject:
   m_ObjectHideFlags: 0

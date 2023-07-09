@@ -13,6 +13,7 @@ public class FurretController : MonoBehaviour
     private float _currentSpeed;
     private PlayerControls _playerControls;
     private Animator _animator;
+    private GameManager _gameManager;
 
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
     private Queue<Vector2> _movementQueue;
@@ -24,6 +25,7 @@ public class FurretController : MonoBehaviour
         _movementQueue = new Queue<Vector2>();
         _playerControls = new PlayerControls();
         _animator = GetComponent<Animator>();
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void OnEnable()
@@ -125,7 +127,7 @@ public class FurretController : MonoBehaviour
         Debug.Log(other);
         if(_remainingInvulnerability <= 0 && other.gameObject.GetComponent<Trainer>() != null)
         {
-            Debug.Log("Pokeball!!!");
+            _gameManager.StartCapture();
             _remainingInvulnerability = InvulnerabilityFrames;
             _currentSpeed = FastSpeed;
         }

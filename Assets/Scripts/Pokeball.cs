@@ -28,7 +28,7 @@ public class Pokeball : MonoBehaviour
 
     private void Start()
     {
-        this.StartCapture(); // TODO: place in different place
+        _spriteRenderer.enabled = false;
     }
 
     private void OnEnable()
