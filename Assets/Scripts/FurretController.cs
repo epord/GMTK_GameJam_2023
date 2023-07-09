@@ -10,6 +10,10 @@ public class FurretController : MonoBehaviour
     public float FastSpeed = 0.03f;
     public float ChangeDirectionTolerance = 0.1f;
     public int InvulnerabilityFrames = 300;
+    public Color level1Color = Color.yellow;
+    public Color level2Color = Color.magenta;
+    public Color level3Color = Color.red;
+    private Color _currentColor = Color.white;
     private float _currentSpeed;
     private PlayerControls _playerControls;
     private Animator _animator;
@@ -20,7 +24,7 @@ public class FurretController : MonoBehaviour
     private Queue<Vector2> _movementQueue;
     private int _remainingInvulnerability = 0;
     private Coroutine _blinkCoroutine;
-
+    private int _accumulatedDamage = 0;
 
     private void Awake()
     {
@@ -130,6 +134,9 @@ public class FurretController : MonoBehaviour
                 _spriteRenderer.enabled = true;
             }
         }
+
+        Color lerpedColor = Color.Lerp(Color.white, _currentColor, Mathf.PingPong(Time.time, 1));
+        _spriteRenderer.color = lerpedColor;
     }
 
     void FixedUpdate()
@@ -148,6 +155,19 @@ public class FurretController : MonoBehaviour
             _gameManager.StartCapture();
             _remainingInvulnerability = InvulnerabilityFrames;
             _currentSpeed = FastSpeed;
+            _accumulatedDamage++;
+            if (_accumulatedDamage > 3)
+            {
+                _currentColor = level3Color;
+            }
+            else if (_accumulatedDamage > 2)
+            {
+                _currentColor = level2Color;
+            }
+            else if (_accumulatedDamage > 1)
+            {
+                _currentColor = level1Color;
+            }
         }
     }
 
