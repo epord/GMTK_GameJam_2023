@@ -161,6 +161,7 @@ public class Pokeball : MonoBehaviour
     private IEnumerator Tilt()
     {
         _gameManager.IsCapturing = true;
+        isCapturing = true;
 
         StartCoroutine(Attack());
         yield return new WaitForSeconds(3.8f);
@@ -169,7 +170,6 @@ public class Pokeball : MonoBehaviour
         _spriteRenderer.enabled = true;
         _gameManager.SetPlayerActive(false);
         escapeCount = 0;
-        isCapturing = true;
         _gameManager.ReduceMainThemeVolume();
 
         // Start capturing
