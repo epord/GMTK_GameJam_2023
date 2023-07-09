@@ -159,7 +159,7 @@ public class FurretController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if(_remainingInvulnerability <= 0 && other.gameObject.GetComponent<Trainer>() != null)
         {
