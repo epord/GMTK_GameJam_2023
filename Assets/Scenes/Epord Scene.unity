@@ -1194,6 +1194,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4470134617983272045, guid: 974ec16c6fcf2cc4589c5221c8438ed6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4470134617983272045, guid: 974ec16c6fcf2cc4589c5221c8438ed6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1048041197
+      objectReference: {fileID: 0}
     - target: {fileID: 8420296114090706369, guid: 974ec16c6fcf2cc4589c5221c8438ed6, type: 3}
       propertyPath: m_Name
       value: Zigzagoon
@@ -1317,11 +1325,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 338369877549308782, guid: feb7dec1e3e9356469087c8205a40b89, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.227339
+      value: -5.258
       objectReference: {fileID: 0}
     - target: {fileID: 338369877549308782, guid: feb7dec1e3e9356469087c8205a40b89, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.1597285
+      value: -4.13
       objectReference: {fileID: 0}
     - target: {fileID: 338369877549308782, guid: feb7dec1e3e9356469087c8205a40b89, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1353,10 +1361,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 338369877549308782, guid: feb7dec1e3e9356469087c8205a40b89, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3179042308164698620, guid: feb7dec1e3e9356469087c8205a40b89, type: 3}
-      propertyPath: m_MaskInteraction
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8688128122582602286, guid: feb7dec1e3e9356469087c8205a40b89, type: 3}
