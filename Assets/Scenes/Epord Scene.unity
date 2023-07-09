@@ -855,6 +855,10 @@ PrefabInstance:
       propertyPath: NormalSpeed
       value: 0.002
       objectReference: {fileID: 0}
+    - target: {fileID: 1340542043679846858, guid: 974ec16c6fcf2cc4589c5221c8438ed6, type: 3}
+      propertyPath: ChangeDirectionTolerance
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 3106399482027874848, guid: 974ec16c6fcf2cc4589c5221c8438ed6, type: 3}
       propertyPath: m_RootOrder
       value: 1
