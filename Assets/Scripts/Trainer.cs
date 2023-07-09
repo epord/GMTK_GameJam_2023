@@ -6,18 +6,18 @@ using static UnityEngine.EventSystems.StandaloneInputModule;
 public class Trainer : MonoBehaviour
 {
 
-    public GameObject Player;
     public float SightDistance = 10.0f;
     public float TrainerBaseSpeed = 0.02f;
     public float MinimumMovementTolerance = 0.01f;
 
+    private GameObject Player;
     private Vector3 _lastPlayerPosition;
     private Queue<Vector2> _movementQueue;
     private float _currentSpeed = 0f;
     private bool _knowsPlayer = false;
     private Animator _animator;
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
-
+    private GameManager _gameManager;
 
 
     // Start is called before the first frame update
@@ -26,6 +26,8 @@ public class Trainer : MonoBehaviour
         _movementQueue = new Queue<Vector2>();
         _currentSpeed = TrainerBaseSpeed;
         _animator = GetComponent<Animator>();
+        _gameManager = FindObjectOfType<GameManager>();
+        Player = _gameManager.GetPlayerGameObject();
 
     }
 
