@@ -11,9 +11,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - HighGrass
+  - ForestObjects
+  - Player
   - 
   - 
   - 
@@ -40,4 +40,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: HighGrass
+    uniqueID: 1797198603
+    locked: 0
+  - name: Player
+    uniqueID: 693233765
+    locked: 0
+  - name: ForestObjects
+    uniqueID: 1048041197
     locked: 0
