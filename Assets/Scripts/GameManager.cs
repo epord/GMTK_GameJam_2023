@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
     public bool IsCapturing { get; set; }
     public GameObject _player;
     public GameObject _pokeball;
-    public AudioClip mainTheme;
 
     private AudioSource _audioSource;
 
@@ -41,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     public void RestoreMainThemeVolume()
     {
-        _audioSource.volume = 0.3f;
+        _audioSource.volume = 0.2f;
     }
 
 }
