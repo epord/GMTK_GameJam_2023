@@ -9,7 +9,7 @@ public class FurretController : MonoBehaviour
     public float NormalSpeed = 0.002f;
     public float FastSpeed = 0.03f;
     public float ChangeDirectionTolerance = 0.1f;
-    public int InvulnerabilityFrames = 300;
+    public float InvulnerabilityTime = 3f;
     public Color level1Color = Color.yellow;
     public Color level2Color = Color.magenta;
     public Color level3Color = Color.red;
@@ -22,7 +22,7 @@ public class FurretController : MonoBehaviour
 
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
     private Queue<Vector2> _movementQueue;
-    private int _remainingInvulnerability = 0;
+    public float _remainingInvulnerabilityTime = 0;
     private Coroutine _blinkCoroutine;
     private int _accumulatedDamage = 0;
 
@@ -121,17 +121,17 @@ public class FurretController : MonoBehaviour
         _animator.SetBool("moving", inputMove.x != 0 || inputMove.y != 0);
         _movementQueue.Enqueue(inputMove * _currentSpeed);
 
-        if (_remainingInvulnerability >= 0)
+        if (_remainingInvulnerabilityTime >= 0)
         {
-            if (_remainingInvulnerability == InvulnerabilityFrames)
+            if (_remainingInvulnerabilityTime == InvulnerabilityTime)
             {
                 _blinkCoroutine = StartCoroutine(Blink());
             }
 
-            _remainingInvulnerability--;
+            _remainingInvulnerabilityTime -= Time.deltaTime;
         }
 
-        if (_remainingInvulnerability <= 0)
+        if (_remainingInvulnerabilityTime <= 0)
         {
             _currentSpeed = NormalSpeed;
             if (_blinkCoroutine != null)
@@ -143,14 +143,7 @@ public class FurretController : MonoBehaviour
 
         Color lerpedColor = Color.Lerp(Color.white, _currentColor, Mathf.PingPong(Time.time, 1));
         _spriteRenderer.color = lerpedColor;
-    }
 
-    void FixedUpdate()
-    {
-        if (_gameManager.IsCapturing)
-        {
-            return;
-        }
 
         while (_movementQueue.Count > 0)
         {
@@ -159,12 +152,20 @@ public class FurretController : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (_gameManager.IsCapturing)
+        {
+            return;
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(_remainingInvulnerability <= 0 && other.gameObject.GetComponent<Trainer>() != null)
+        if(_remainingInvulnerabilityTime <= 0 && other.gameObject.GetComponent<Trainer>() != null)
         {
             _gameManager.StartCapture(_accumulatedDamage);
-            _remainingInvulnerability = InvulnerabilityFrames;
+            _remainingInvulnerabilityTime = InvulnerabilityTime;
             _currentSpeed = FastSpeed;
             _accumulatedDamage++;
             if (_accumulatedDamage > 3)
