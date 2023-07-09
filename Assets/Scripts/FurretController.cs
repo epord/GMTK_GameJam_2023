@@ -1,7 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class FurretController : MonoBehaviour
 {
@@ -13,10 +13,13 @@ public class FurretController : MonoBehaviour
     private float _currentSpeed;
     private PlayerControls _playerControls;
     private Animator _animator;
+    private GameManager _gameManager;
+    private SpriteRenderer _spriteRenderer;
 
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
     private Queue<Vector2> _movementQueue;
     private int _remainingInvulnerability = 0;
+    private Coroutine _blinkCoroutine;
 
 
     private void Awake()
@@ -24,6 +27,8 @@ public class FurretController : MonoBehaviour
         _movementQueue = new Queue<Vector2>();
         _playerControls = new PlayerControls();
         _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     private void OnEnable()
@@ -54,6 +59,7 @@ public class FurretController : MonoBehaviour
         Vector2 inputMove = _playerControls.Overworld.Move.ReadValue<Vector2>();
         // Get the proper direction
         MovementDirection newMoveDirection = MovementDirection.RIGHT;
+
         if (Mathf.Abs(inputMove.y) * 2 <= Mathf.Abs(inputMove.x))
         {
             if (inputMove.x >= 0)
@@ -92,22 +98,37 @@ public class FurretController : MonoBehaviour
         {
             newMoveDirection = MovementDirection.DOWN_LEFT;
         }
+
         // Do not update the direction animation if the movement is too small
         if (Mathf.Abs(inputMove.x) >= ChangeDirectionTolerance || Mathf.Abs(inputMove.y) >= ChangeDirectionTolerance)
         {
             _movementDirection = newMoveDirection;
         }
+
         _animator.SetInteger("direction", (int)_movementDirection);
+
         // Turn off the animator when standing still
         _animator.SetBool("moving", inputMove.x != 0 || inputMove.y != 0);
         _movementQueue.Enqueue(inputMove * _currentSpeed);
+
         if (_remainingInvulnerability >= 0)
         {
+            if (_remainingInvulnerability == InvulnerabilityFrames)
+            {
+                _blinkCoroutine = StartCoroutine(Blink());
+            }
+
             _remainingInvulnerability--;
         }
+
         if (_remainingInvulnerability <= 0)
         {
             _currentSpeed = NormalSpeed;
+            if (_blinkCoroutine != null)
+            {
+                StopCoroutine(_blinkCoroutine);
+                _spriteRenderer.enabled = true;
+            }
         }
     }
 
@@ -122,12 +143,22 @@ public class FurretController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other);
         if(_remainingInvulnerability <= 0 && other.gameObject.GetComponent<Trainer>() != null)
         {
-            Debug.Log("Pokeball!!!");
+            _gameManager.StartCapture();
             _remainingInvulnerability = InvulnerabilityFrames;
             _currentSpeed = FastSpeed;
+        }
+    }
+
+    private IEnumerator Blink()
+    {
+        while (true)
+        {
+            _spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(0.2f);
+            _spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(0.3f);
         }
     }
 }

@@ -37,24 +37,35 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
+                    ""name"": ""EscapePokeball"",
+                    ""type"": ""Value"",
                     ""id"": ""09dd8c86-861c-47eb-b64e-94fa621f7904"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""1cbdb075-7468-4dbf-b50c-4acef85e7c56"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""EscapePokeball"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7fd9b310-9e2a-4120-968e-8b15265137db"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EscapePokeball"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -187,7 +198,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Overworld
         m_Overworld = asset.FindActionMap("Overworld", throwIfNotFound: true);
         m_Overworld_Move = m_Overworld.FindAction("Move", throwIfNotFound: true);
-        m_Overworld_Newaction = m_Overworld.FindAction("New action", throwIfNotFound: true);
+        m_Overworld_EscapePokeball = m_Overworld.FindAction("EscapePokeball", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -250,13 +261,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Overworld;
     private List<IOverworldActions> m_OverworldActionsCallbackInterfaces = new List<IOverworldActions>();
     private readonly InputAction m_Overworld_Move;
-    private readonly InputAction m_Overworld_Newaction;
+    private readonly InputAction m_Overworld_EscapePokeball;
     public struct OverworldActions
     {
         private @PlayerControls m_Wrapper;
         public OverworldActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Overworld_Move;
-        public InputAction @Newaction => m_Wrapper.m_Overworld_Newaction;
+        public InputAction @EscapePokeball => m_Wrapper.m_Overworld_EscapePokeball;
         public InputActionMap Get() { return m_Wrapper.m_Overworld; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -269,9 +280,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @EscapePokeball.started += instance.OnEscapePokeball;
+            @EscapePokeball.performed += instance.OnEscapePokeball;
+            @EscapePokeball.canceled += instance.OnEscapePokeball;
         }
 
         private void UnregisterCallbacks(IOverworldActions instance)
@@ -279,9 +290,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @EscapePokeball.started -= instance.OnEscapePokeball;
+            @EscapePokeball.performed -= instance.OnEscapePokeball;
+            @EscapePokeball.canceled -= instance.OnEscapePokeball;
         }
 
         public void RemoveCallbacks(IOverworldActions instance)
@@ -302,6 +313,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IOverworldActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnEscapePokeball(InputAction.CallbackContext context);
     }
 }

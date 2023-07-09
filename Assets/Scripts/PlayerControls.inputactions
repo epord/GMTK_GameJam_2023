@@ -15,24 +15,35 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "New action",
-                    "type": "Button",
+                    "name": "EscapePokeball",
+                    "type": "Value",
                     "id": "09dd8c86-861c-47eb-b64e-94fa621f7904",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "1cbdb075-7468-4dbf-b50c-4acef85e7c56",
-                    "path": "",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "EscapePokeball",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7fd9b310-9e2a-4120-968e-8b15265137db",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EscapePokeball",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

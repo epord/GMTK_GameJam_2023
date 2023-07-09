@@ -53,3 +53,6 @@ TagManager:
   - name: FogOfWar
     uniqueID: 3676098767
     locked: 0
+  - name: Pokeball
+    uniqueID: 3096708137
+    locked: 0
