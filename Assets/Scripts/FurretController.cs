@@ -6,15 +6,18 @@ using static UnityEngine.EventSystems.StandaloneInputModule;
 public class FurretController : MonoBehaviour
 {
     // Constants that can be edited from UI
-    public float NormalSpeed = 1f;
+    public float NormalSpeed = 0.002f;
+    public float FastSpeed = 0.03f;
     public float ChangeDirectionTolerance = 0.1f;
+    public int InvulnerabilityFrames = 300;
     private float _currentSpeed;
     private PlayerControls _playerControls;
     private Animator _animator;
 
     private MovementDirection _movementDirection = MovementDirection.RIGHT;
-    private Vector2 _lastMovement = Vector2.zero;
     private Queue<Vector2> _movementQueue;
+    private int _remainingInvulnerability = 0;
+
 
     private void Awake()
     {
@@ -98,6 +101,14 @@ public class FurretController : MonoBehaviour
         // Turn off the animator when standing still
         _animator.SetBool("moving", inputMove.x != 0 || inputMove.y != 0);
         _movementQueue.Enqueue(inputMove * _currentSpeed);
+        if (_remainingInvulnerability >= 0)
+        {
+            _remainingInvulnerability--;
+        }
+        if (_remainingInvulnerability <= 0)
+        {
+            _currentSpeed = NormalSpeed;
+        }
     }
 
     void FixedUpdate()
@@ -108,9 +119,18 @@ public class FurretController : MonoBehaviour
             transform.position += new Vector3(qMove.x, qMove.y);
         }
     }
-}
 
-   
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log(other);
+        if(_remainingInvulnerability <= 0 && other.gameObject.GetComponent<Trainer>() != null)
+        {
+            Debug.Log("Pokeball!!!");
+            _remainingInvulnerability = InvulnerabilityFrames;
+            _currentSpeed = FastSpeed;
+        }
+    }
+}
 
 public enum MovementDirection
 {
