@@ -391,6 +391,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capturingClip: {fileID: 8300000, guid: 8b406f1359ee757498216513b6b97465, type: 3}
   escapeClip: {fileID: 8300000, guid: b1bd1f8c764c4114a917ee20337a4e8e, type: 3}
+  attack1Clip: {fileID: 8300000, guid: 4137eaa750965dd4092e7a79fdc6bf8b, type: 3}
+  attack2Clip: {fileID: 8300000, guid: 2f12bce5cd750bd4288e6d5769ecd7e2, type: 3}
 --- !u!82 &2916070861139808725
 AudioSource:
   m_ObjectHideFlags: 0

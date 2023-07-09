@@ -60,6 +60,12 @@ public class FurretController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_gameManager.IsCapturing)
+        {
+            _animator.SetBool("moving", false);
+            return;
+        }
+
         Vector2 inputMove = _playerControls.Overworld.Move.ReadValue<Vector2>();
         // Get the proper direction
         MovementDirection newMoveDirection = MovementDirection.RIGHT;
@@ -141,6 +147,11 @@ public class FurretController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_gameManager.IsCapturing)
+        {
+            return;
+        }
+
         while (_movementQueue.Count > 0)
         {
             Vector2 qMove = _movementQueue.Dequeue();

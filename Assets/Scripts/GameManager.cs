@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject _player;
     public GameObject _pokeball;
+    public bool IsCapturing { get; set; }
 
     public void Start()
     {

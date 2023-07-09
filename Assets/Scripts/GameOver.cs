@@ -12,7 +12,7 @@ public class GameOver : MonoBehaviour
     void Start()
     {
         ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
-        gameOverText.text = $"You have been captured in {Mathf.RoundToInt(scoreManager.Score)}s.\nThere is no escape now\n\n\n<Space> to retry";
+        gameOverText.text = $"You have been captured in {Mathf.RoundToInt(scoreManager.Score)} seconds.\nThere is no escape now\n\n\n<Space> to retry";
     }
 
     // Update is called once per frame

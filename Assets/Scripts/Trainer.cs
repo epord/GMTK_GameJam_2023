@@ -39,6 +39,11 @@ public class Trainer : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_gameManager.IsCapturing)
+        {
+            return;
+        }
+
         Vector2 origin = transform.position;
         Vector2 direction = Player.transform.position - transform.position;
         RaycastHit2D[] hits = Physics2D.RaycastAll(origin, direction, SightDistance);
