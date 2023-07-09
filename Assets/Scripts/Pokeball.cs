@@ -153,14 +153,21 @@ public class Pokeball : MonoBehaviour
 
     private IEnumerator Attack()
     {
-        yield return new WaitForSeconds(0.2f);
+        var shakeAttack = _gameManager._player.GetComponent<ShakeAttack>();
+        shakeAttack.enabled = true;
         _audioSource.PlayOneShot(attack1Clip);
         yield return new WaitForSeconds(1.2f);
+        shakeAttack.enabled = false;
+        yield return new WaitForSeconds(1f);
+        shakeAttack.enabled = true;
         _audioSource.PlayOneShot(attack2Clip);
+        yield return new WaitForSeconds(1.2f);
+        shakeAttack.enabled = false;
     }
 
     private IEnumerator Tilt()
     {
+        _gameManager.ReduceMainThemeVolume();
         _gameManager.IsCapturing = true;
         isCapturing = true;
 
@@ -171,7 +178,6 @@ public class Pokeball : MonoBehaviour
         _spriteRenderer.enabled = true;
         _gameManager.SetPlayerActive(false);
         escapeCount = 0;
-        _gameManager.ReduceMainThemeVolume();
 
         // Start capturing
         _audioSource.PlayOneShot(capturingClip);
