@@ -131,12 +131,6 @@ public class Pokeball : MonoBehaviour
             _escapeCountNeeded = Random.Range(3, 5);
         }
 
-        _spriteRenderer.sprite = sprites[(int)_ballType];
-        _spriteRenderer.enabled = true;
-        _gameManager.SetPlayerActive(false);
-        escapeCount = 0;
-        isCapturing = true;
-        _gameManager.IsCapturing = true;
         capturingCoroutine = StartCoroutine(Tilt());
     }
 
@@ -153,25 +147,30 @@ public class Pokeball : MonoBehaviour
         _spriteRenderer.enabled = false;
         _gameManager.SetPlayerActive(true);
         _gameManager.IsCapturing = false;
+        _gameManager.RestoreMainThemeVolume();
     }
 
     private IEnumerator Attack()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         _audioSource.PlayOneShot(attack1Clip);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.2f);
         _audioSource.PlayOneShot(attack2Clip);
     }
 
     private IEnumerator Tilt()
     {
-        StartCoroutine(Attack());
-        yield return new WaitForSeconds(4.6f);
+        _gameManager.IsCapturing = true;
 
+        StartCoroutine(Attack());
+        yield return new WaitForSeconds(3.8f);
+
+        _spriteRenderer.sprite = sprites[(int)_ballType];
         _spriteRenderer.enabled = true;
         _gameManager.SetPlayerActive(false);
         escapeCount = 0;
         isCapturing = true;
+        _gameManager.ReduceMainThemeVolume();
 
         // Start capturing
         _audioSource.PlayOneShot(capturingClip);

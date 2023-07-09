@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public bool IsCapturing { get; set; }
     public GameObject _player;
     public GameObject _pokeball;
-    public bool IsCapturing { get; set; }
+    public AudioClip mainTheme;
+
+    private AudioSource _audioSource;
+
     public void Start()
     {
         FindObjectOfType<ScoreManager>().StartGame();
+        _audioSource = GetComponent<AudioSource>();
+
+        this.RestoreMainThemeVolume();
     }
 
     public GameObject GetPlayerGameObject()
@@ -26,4 +33,15 @@ public class GameManager : MonoBehaviour
     {
         _pokeball.GetComponent<Pokeball>().StartCapture(damage);
     }
+
+    public void ReduceMainThemeVolume()
+    {
+        _audioSource.volume = 0.1f;
+    }
+
+    public void RestoreMainThemeVolume()
+    {
+        _audioSource.volume = 0.3f;
+    }
+
 }
