@@ -161,6 +161,7 @@ public class Pokeball : MonoBehaviour
 
     private IEnumerator Tilt()
     {
+        _gameManager.ReduceMainThemeVolume();
         _gameManager.IsCapturing = true;
         isCapturing = true;
 
@@ -171,7 +172,6 @@ public class Pokeball : MonoBehaviour
         _spriteRenderer.enabled = true;
         _gameManager.SetPlayerActive(false);
         escapeCount = 0;
-        _gameManager.ReduceMainThemeVolume();
 
         // Start capturing
         _audioSource.PlayOneShot(capturingClip);
